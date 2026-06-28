@@ -4,13 +4,61 @@ export default {
 
     // 1. GitHub OAuth Flow for Decap CMS
     if (url.pathname === '/auth') {
-      // Implement OAuth start logic here (redirect to GitHub)
-      return new Response("OAuth Auth Endpoint Placeholder", { status: 200 });
+      const clientId = env.GITHUB_CLIENT_ID;
+      const redirectUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=repo`;
+      return Response.redirect(redirectUrl, 302);
     }
 
     if (url.pathname === '/callback') {
-      // Implement OAuth callback logic here (exchange code for token)
-      return new Response("OAuth Callback Endpoint Placeholder", { status: 200 });
+      const code = url.searchParams.get('code');
+      if (!code) {
+        return new Response("Missing code parameter", { status: 400 });
+      }
+
+      try {
+        const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            client_id: env.GITHUB_CLIENT_ID,
+            client_secret: env.GITHUB_CLIENT_SECRET,
+            code: code,
+          }),
+        });
+
+        const tokenData = await tokenResponse.json();
+        const accessToken = tokenData.access_token;
+
+        if (!accessToken) {
+          return new Response("Failed to get access token", { status: 500 });
+        }
+
+        const html = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Authentication Success</title>
+          </head>
+          <body>
+            <script>
+              const msg = 'authorization:github:success:{"token":"${accessToken}","provider":"github"}';
+              window.opener.postMessage(msg, '*');
+              window.close();
+            </script>
+          </body>
+          </html>
+        `;
+
+        return new Response(html, {
+          headers: { 'Content-Type': 'text/html' },
+          status: 200
+        });
+      } catch (err) {
+        return new Response("Auth Error: " + err.message, { status: 500 });
+      }
     }
 
     // 2. Firebase Auth and D1 User Logic
