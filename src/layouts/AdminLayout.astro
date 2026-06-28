@@ -31,6 +31,7 @@ const menuItems = [
         <ul class="space-y-1">
           {menuItems.map((item) => {
             const isActive = currentPath === item.path || currentPath === item.path + '/';
+            const Icon = item.icon;
             return (
               <li>
                 <a
@@ -38,7 +39,7 @@ const menuItems = [
                   class={`flex items-center gap-3 px-4 py-3 hover:bg-gray-800 transition-colors ${isActive ? 'bg-blue-600 border-l-4 border-blue-400' : 'border-l-4 border-transparent'}`}
                   target={item.external ? '_blank' : '_self'}
                 >
-                  <item.icon className="w-5 h-5 text-gray-400" />
+                  <Icon className="w-5 h-5 text-gray-400" />
                   <span class={isActive ? 'font-semibold text-white' : 'text-gray-300'}>{item.name}</span>
                 </a>
               </li>

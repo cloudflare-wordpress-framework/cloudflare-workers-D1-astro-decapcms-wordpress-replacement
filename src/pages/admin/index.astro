@@ -17,17 +17,20 @@ const stats = [
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    {stats.map(stat => (
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium text-gray-500">{stat.title}</CardTitle>
-          <stat.icon className="w-4 h-4 text-gray-400" />
-        </CardHeader>
-        <CardContent>
-          <div class="text-2xl font-bold">{stat.value}</div>
-        </CardContent>
-      </Card>
-    ))}
+    {stats.map(stat => {
+      const Icon = stat.icon;
+      return (
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-gray-500">{stat.title}</CardTitle>
+            <Icon className="w-4 h-4 text-gray-400" />
+          </CardHeader>
+          <CardContent>
+            <div class="text-2xl font-bold">{stat.value}</div>
+          </CardContent>
+        </Card>
+      );
+    })}
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
