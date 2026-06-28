@@ -91,7 +91,11 @@ Worker của bạn đóng vai trò là một API kết nối giữa Frontend và
 
 ### Bước 4: Cấu hình Decap CMS
 
-Quản trị viên sẽ truy cập vào CMS để viết bài. Bạn cần trỏ CMS về đúng kho lưu trữ (Repo) GitHub của bạn.
+Quản trị viên sẽ truy cập vào CMS để viết bài. Tính năng phân quyền Admin hoạt động như sau:
+- Mọi người đều có thể truy cập đường dẫn `/admin`, nhưng **chỉ những tài khoản GitHub được bạn cấp quyền (Collaborator) vào kho mã nguồn (Repository) mới có khả năng đăng nhập và viết bài**. Khi họ nhấn "Đăng nhập", hệ thống GitHub OAuth sẽ tự động từ chối những ai không có thẩm quyền.
+- Nếu bạn tích hợp Firebase Auth, bạn có thể tự thay đổi `role` của một user trong bảng `users` của Cloudflare D1 thành `admin` hoặc `vip` thông qua dòng lệnh SQL để cấp các đặc quyền hiển thị riêng trên giao diện Frontend.
+
+Để trỏ CMS về đúng kho lưu trữ (Repo) GitHub của bạn:
 1. Mở file `public/admin/config.yml`.
 2. Thay đổi đường dẫn repo:
    ```yaml

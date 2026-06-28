@@ -1,9 +1,8 @@
 backend:
   name: github
-  repo: Vnvdacloudlear/cloudflare-workers-D1-astro-decapcms-wordpress-replacement-images # Update this to your repo
+  repo: owner/web-frontend # Update this to your repo
   branch: main # Branch to update
-  base_url: my-astro-site.vnvdacloudlear.workers.dev
- # Update to your worker URL for OAuth
+  base_url: https://your-worker-url.workers.dev # Update to your worker URL for OAuth
 
 media_folder: "public/images" # Folder where uploaded files will be saved
 public_folder: "/images"

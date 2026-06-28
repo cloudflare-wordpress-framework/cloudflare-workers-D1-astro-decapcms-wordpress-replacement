@@ -1,0 +1,84 @@
+---
+import '../../styles/global.css';
+---
+
+<!doctype html>
+<html lang="vi">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Hội Bệnh Mạch Máu Việt Nam</title>
+	</head>
+	<body class="bg-slate-100 text-gray-800 font-sans min-h-screen flex flex-col">
+		<!-- Header Banner -->
+		<div class="bg-white">
+			<div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+				<a href="/" class="flex items-center gap-3">
+                    <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md border-4 border-red-200">
+                        VNVDA
+                    </div>
+					<div>
+                        <h1 class="text-2xl font-bold text-red-700 uppercase tracking-tight">Hội Bệnh Mạch Máu Việt Nam</h1>
+                        <p class="text-sm text-gray-600 uppercase font-medium">Viet Nam Vascular Disease Association</p>
+                    </div>
+				</a>
+                <div class="flex gap-2">
+                    <input type="text" placeholder="Tìm kiếm..." class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-red-500" />
+                    <button class="bg-red-600 text-white px-3 py-1.5 rounded text-sm hover:bg-red-700">Tìm kiếm</button>
+                </div>
+			</div>
+		</div>
+
+        <!-- Navigation Menu -->
+        <nav class="bg-[#1a3b5c] sticky top-0 z-50 shadow-md border-b-4 border-red-600">
+            <div class="max-w-6xl mx-auto px-4">
+                <ul class="flex flex-wrap text-sm font-semibold text-white">
+                    <li><a href="/" class="block px-4 py-3 hover:bg-red-600 transition-colors bg-red-600">Trang chủ</a></li>
+                    <li><a href="#" class="block px-4 py-3 hover:bg-red-600 transition-colors">Giới thiệu</a></li>
+                    <li><a href="#" class="block px-4 py-3 hover:bg-red-600 transition-colors">Tin tức - Sự kiện</a></li>
+                    <li><a href="#" class="block px-4 py-3 hover:bg-red-600 transition-colors">Hội viên</a></li>
+                    <li><a href="#" class="block px-4 py-3 hover:bg-red-600 transition-colors">Tài liệu Y khoa</a></li>
+                    <li><a href="#" class="block px-4 py-3 hover:bg-red-600 transition-colors">Liên hệ</a></li>
+                    <li class="ml-auto"><a href="/admin" class="block px-4 py-3 bg-gray-800 hover:bg-gray-700 transition-colors">Đăng nhập</a></li>
+                </ul>
+            </div>
+        </nav>
+
+		<!-- Main Content -->
+		<main class="flex-1 w-full max-w-6xl mx-auto p-4 py-8">
+			<slot />
+		</main>
+
+		<!-- Footer -->
+		<footer class="bg-[#1a3b5c] text-white pt-10 pb-6 border-t-4 border-red-600">
+			<div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <h3 class="text-xl font-bold uppercase mb-4 text-red-400">Hội Bệnh Mạch Máu VN</h3>
+                    <p class="text-sm text-gray-300 leading-relaxed mb-4">Tổ chức xã hội - nghề nghiệp của công dân, tổ chức Việt Nam hoạt động trong lĩnh vực chuyên ngành bệnh mạch máu.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold uppercase mb-4 text-red-400">Liên hệ</h3>
+                    <ul class="text-sm text-gray-300 space-y-2">
+                        <li>📍 Địa chỉ: Hà Nội, Việt Nam</li>
+                        <li>✉️ Email: info@vnvda.com</li>
+                        <li>📞 Điện thoại: (024) 1234 5678</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold uppercase mb-4 text-red-400">Liên kết</h3>
+                    <ul class="text-sm text-gray-300 space-y-2">
+                        <li><a href="#" class="hover:text-white transition-colors">Bệnh viện Hữu nghị Việt Đức</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Bộ Y Tế</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Hội Phẫu Thuật Tim Mạch</a></li>
+                    </ul>
+                </div>
+			</div>
+            <div class="text-center text-sm text-gray-400 border-t border-gray-700 pt-6">
+                &copy; {new Date().getFullYear()} Hội Bệnh Mạch Máu Việt Nam. All Rights Reserved. (Mô phỏng Giao diện)
+            </div>
+		</footer>
+	</body>
+</html>
