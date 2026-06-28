@@ -34,15 +34,60 @@ import '../../styles/global.css';
 
         <!-- Navigation Menu -->
         <nav class="bg-[#1a3b5c] sticky top-0 z-50 shadow-md border-b-4 border-red-600">
-            <div class="max-w-6xl mx-auto px-4">
-                <ul class="flex flex-wrap text-sm font-semibold text-white">
-                    <li><a href="/" class="block px-4 py-3 hover:bg-red-600 transition-colors bg-red-600">Trang chủ</a></li>
-                    <li><a href="#" class="block px-4 py-3 hover:bg-red-600 transition-colors">Giới thiệu</a></li>
-                    <li><a href="#" class="block px-4 py-3 hover:bg-red-600 transition-colors">Tin tức - Sự kiện</a></li>
-                    <li><a href="#" class="block px-4 py-3 hover:bg-red-600 transition-colors">Hội viên</a></li>
-                    <li><a href="#" class="block px-4 py-3 hover:bg-red-600 transition-colors">Tài liệu Y khoa</a></li>
-                    <li><a href="#" class="block px-4 py-3 hover:bg-red-600 transition-colors">Liên hệ</a></li>
-                    <li class="ml-auto"><a href="/admin" class="block px-4 py-3 bg-gray-800 hover:bg-gray-700 transition-colors">Đăng nhập</a></li>
+            <div class="max-w-6xl mx-auto px-4 flex justify-between items-center md:block relative">
+                <!-- Mobile Toggle Button -->
+                <button id="mobile-menu-btn" class="md:hidden block text-white p-3 hover:text-red-400 focus:outline-none ml-auto" aria-label="Toggle Navigation">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+
+                <ul id="main-menu" class="hidden md:flex flex-col md:flex-row text-sm font-semibold text-white w-full absolute md:relative top-full left-0 bg-[#1a3b5c] md:bg-transparent shadow-md md:shadow-none z-50">
+                    <li><a href="/" class="block px-4 py-3 hover:bg-red-600 transition-colors bg-red-600 border-b md:border-none border-[#2c4e71]">Trang chủ</a></li>
+
+                    <li class="group relative">
+                        <a href="#" class="block px-4 py-3 hover:bg-red-600 transition-colors border-b md:border-none border-[#2c4e71] flex justify-between items-center">
+                            Giới thiệu
+                            <svg class="w-4 h-4 ml-1 md:inline hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </a>
+                        <!-- Submenu -->
+                        <ul class="hidden md:group-hover:block absolute left-0 bg-white text-gray-800 shadow-lg min-w-[200px] border-t-2 border-red-600 mobile-submenu">
+                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors">Về chúng tôi</a></li>
+                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Lịch sử hình thành</a></li>
+                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Ban chấp hành</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="group relative">
+                        <a href="#" class="block px-4 py-3 hover:bg-red-600 transition-colors border-b md:border-none border-[#2c4e71] flex justify-between items-center">
+                            Tin tức - Sự kiện
+                            <svg class="w-4 h-4 ml-1 md:inline hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </a>
+                        <ul class="hidden md:group-hover:block absolute left-0 bg-white text-gray-800 shadow-lg min-w-[200px] border-t-2 border-red-600 mobile-submenu">
+                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors">Hoạt động hội</a></li>
+                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Cập nhật y khoa</a></li>
+                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Hợp tác quốc tế</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="group relative">
+                        <a href="#" class="block px-4 py-3 hover:bg-red-600 transition-colors border-b md:border-none border-[#2c4e71] flex justify-between items-center">
+                            Hội viên
+                            <svg class="w-4 h-4 ml-1 md:inline hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </a>
+                        <ul class="hidden md:group-hover:block absolute left-0 bg-white text-gray-800 shadow-lg min-w-[200px] border-t-2 border-red-600 mobile-submenu">
+                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors">Đăng ký</a></li>
+                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Hội phí</a></li>
+                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Danh sách hội viên</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#" class="block px-4 py-3 hover:bg-red-600 transition-colors border-b md:border-none border-[#2c4e71]">Tài liệu Y khoa</a></li>
+                    <li><a href="#" class="block px-4 py-3 hover:bg-red-600 transition-colors border-b md:border-none border-[#2c4e71]">Liên hệ</a></li>
+
+                    <li class="md:ml-auto mt-2 md:mt-0 mb-2 md:mb-0 px-4 md:px-0">
+                        <a href="/admin" class="block md:inline-block px-4 py-2 md:py-3 bg-gray-800 hover:bg-gray-700 transition-colors text-center rounded md:rounded-none">Đăng nhập</a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -80,5 +125,47 @@ import '../../styles/global.css';
                 &copy; {new Date().getFullYear()} Hội Bệnh Mạch Máu Việt Nam. All Rights Reserved. (Mô phỏng Giao diện)
             </div>
 		</footer>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+                const mainMenu = document.getElementById('main-menu');
+                const parentMenuItems = document.querySelectorAll('#main-menu > li.group > a');
+
+                if (mobileMenuBtn && mainMenu) {
+                    mobileMenuBtn.addEventListener('click', () => {
+                        mainMenu.classList.toggle('hidden');
+                    });
+                }
+
+                // Handle submenu toggling on mobile
+                parentMenuItems.forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        if (window.innerWidth < 768) { // Only active on mobile
+                            e.preventDefault();
+                            const submenu = item.nextElementSibling;
+                            if (submenu && submenu.classList.contains('mobile-submenu')) {
+                                submenu.classList.toggle('hidden');
+                                // Reset position for mobile flow
+                                if (!submenu.classList.contains('hidden')) {
+                                    submenu.classList.remove('absolute', 'shadow-lg');
+                                    submenu.classList.add('relative', 'w-full', 'bg-[#152e48]', 'text-white');
+
+                                    // Make submenu links match mobile theme
+                                    const links = submenu.querySelectorAll('a');
+                                    links.forEach(l => {
+                                        l.classList.remove('hover:bg-gray-100', 'hover:text-red-600', 'border-gray-100');
+                                        l.classList.add('hover:bg-red-600', 'border-[#2c4e71]');
+                                    });
+                                } else {
+                                    submenu.classList.add('absolute', 'shadow-lg');
+                                    submenu.classList.remove('relative', 'w-full', 'bg-[#152e48]', 'text-white');
+                                }
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
 	</body>
 </html>
