@@ -1,42 +1,33 @@
 ---
 import Layout from './Layout.astro';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import pluginsConfig from '../../plugins/plugins.config.json';
 
-const Slider = pluginsConfig.active_plugins.includes('plugin-slider')
-  ? (await import('../../plugins/plugin-slider/Slider.astro')).default
-  : null;
+const getNews = async () => {
+  try {
+    // @ts-ignore: Astro.glob is available in Astro components but types might not be perfectly inferred here
+    const allPosts = await Astro.glob('../../pages/posts/*.md');
+    return allPosts.map((post: any) => ({
+      title: post.frontmatter.title,
+      desc: post.frontmatter.desc,
+      date: post.frontmatter.date,
+      image: post.frontmatter.image,
+      url: post.url
+    }));
+  } catch (e) {
+    // Fallback if no posts
+    return [
+      { title: "Hội nghị khoa học toàn quốc Hội Bệnh Mạch Máu Việt Nam 2024", date: "15/10/2023", image: "https://via.placeholder.com/600x400?text=Hoi+Nghi+Mach+Mau", url: "#" },
+      { title: "Cập nhật Hướng dẫn chẩn đoán và điều trị bệnh động mạch ngoại biên", date: "02/11/2023", image: "https://via.placeholder.com/600x400?text=Huong+Dan+Dieu+Tri", url: "#" },
+      { title: "Sinh hoạt khoa học chuyên đề: Phình động mạch chủ bụng", date: "20/11/2023", image: "https://via.placeholder.com/600x400?text=Sinh+Hoat+Khoa+Hoc", url: "#" },
+      { title: "Thông báo nộp phí hội viên năm 2024", date: "05/12/2023", image: "https://via.placeholder.com/600x400?text=Thong+Bao", url: "#" },
+    ];
+  }
+};
 
-let news: any[] = [];
-try {
-  // @ts-ignore: Astro.glob is available in Astro components but types might not be perfectly inferred here
-  const allPosts = await Astro.glob('../../pages/posts/*.md');
-  news = allPosts.map((post: any) => ({
-    title: post.frontmatter.title,
-    desc: post.frontmatter.desc,
-    date: post.frontmatter.date,
-    image: post.frontmatter.image,
-    url: post.url
-  }));
-} catch (e) {
-  // Fallback if no posts
-  news = [
-    { title: "Hội nghị khoa học toàn quốc Hội Bệnh Mạch Máu Việt Nam 2024", date: "15/10/2023", image: "https://via.placeholder.com/600x400?text=Hoi+Nghi+Mach+Mau", url: "#" },
-    { title: "Cập nhật Hướng dẫn chẩn đoán và điều trị bệnh động mạch ngoại biên", date: "02/11/2023", image: "https://via.placeholder.com/600x400?text=Huong+Dan+Dieu+Tri", url: "#" },
-    { title: "Sinh hoạt khoa học chuyên đề: Phình động mạch chủ bụng", date: "20/11/2023", image: "https://via.placeholder.com/600x400?text=Sinh+Hoat+Khoa+Hoc", url: "#" },
-    { title: "Thông báo nộp phí hội viên năm 2024", date: "05/12/2023", image: "https://via.placeholder.com/600x400?text=Thong+Bao", url: "#" },
-  ];
-}
-const news = [
-  { title: "Hội nghị khoa học toàn quốc Hội Bệnh Mạch Máu Việt Nam 2024", date: "15/10/2023", image: "https://placehold.co/600x400?text=Hoi+Nghi+Mach+Mau" },
-  { title: "Cập nhật Hướng dẫn chẩn đoán và điều trị bệnh động mạch ngoại biên", date: "02/11/2023", image: "https://placehold.co/600x400?text=Huong+Dan+Dieu+Tri" },
-  { title: "Sinh hoạt khoa học chuyên đề: Phình động mạch chủ bụng", date: "20/11/2023", image: "https://placehold.co/600x400?text=Sinh+Hoat+Khoa+Hoc" },
-  { title: "Thông báo nộp phí hội viên năm 2024", date: "05/12/2023", image: "https://placehold.co/600x400?text=Thong+Bao" },
-];
+const news = await getNews();
 ---
 
 <Layout>
-    {Slider && <Slider />}
     <div class="flex flex-col lg:flex-row gap-8">
 
         <!-- Cột nội dung chính (70%) -->
@@ -53,7 +44,7 @@ const news = [
                     // Bài viết đầu tiên làm nổi bật
                     if(index === 0) {
                         return (
-                            <div class="md:col-span-2 relative group overflow-hidden bg-white shadow-md border rounded hover:-translate-y-1 hover:shadow-xl transition-all duration-300 cursor-pointer">
+                            <div class="md:col-span-2 relative group overflow-hidden bg-white shadow-md border rounded">
                                 <img src={item.image} alt={item.title} class="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500" />
                                 <div class="absolute bottom-0 w-full bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent p-6">
                                     <div class="text-red-400 text-sm font-bold mb-2">{item.date}</div>
@@ -130,41 +121,5 @@ const news = [
             </div>
         </div>
 
-    </div>
-
-    <!-- Sponsor Section -->
-    <div class="mt-12 sponsor-container w-full mx-auto text-center border-t border-gray-300 pt-10 pb-8 px-4">
-        <div class="mb-10">
-            <h3 class="text-xl font-bold text-gray-900 mb-4 uppercase">NHÀ TÀI TRỢ KIM CƯƠNG <span class="block text-sm font-normal text-gray-500 mt-1">DIAMOND SPONSOR</span></h3>
-            <div class="flex justify-center items-center flex-wrap gap-5">
-                <img src="https://github.com/VienViDiAy/publicfiles/raw/main/bai_viet/H%E1%BB%99i%20ngh%E1%BB%8B%20khoa%20h%E1%BB%8Dc%20to%C3%A0n%20qu%E1%BB%91c%20th%C6%B0%E1%BB%9Dng%20ni%C3%AAn%20l%E1%BA%A7n%20th%E1%BB%A9%20V%202026/logo-nha-tai-tro/abbott.png" alt="Abbott" class="bg-white border border-gray-200 rounded p-2 object-contain h-auto max-w-[200px]" />
-            </div>
-        </div>
-
-        <div class="mb-10">
-            <h3 class="text-xl font-bold text-gray-900 mb-4 uppercase">NHÀ TÀI TRỢ VÀNG <span class="block text-sm font-normal text-gray-500 mt-1">GOLD SPONSOR</span></h3>
-            <div class="flex justify-center items-center flex-wrap gap-5">
-                <img src="https://github.com/VienViDiAy/publicfiles/raw/main/bai_viet/H%E1%BB%99i%20ngh%E1%BB%8B%20khoa%20h%E1%BB%8Dc%20to%C3%A0n%20qu%E1%BB%91c%20th%C6%B0%E1%BB%9Dng%20ni%C3%AAn%20l%E1%BA%A7n%20th%E1%BB%A9%20V%202026/logo-nha-tai-tro/medtronic.png" alt="Medtronic" class="bg-white border border-gray-200 rounded p-2 object-contain h-auto max-w-[200px]" />
-            </div>
-        </div>
-
-        <div class="mb-10">
-            <h3 class="text-xl font-bold text-gray-900 mb-4 uppercase">NHÀ TÀI TRỢ ĐỒNG <span class="block text-sm font-normal text-gray-500 mt-1">COPPER SPONSORS</span></h3>
-            <div class="flex justify-center items-center flex-wrap gap-5">
-                <img src="https://github.com/VienViDiAy/publicfiles/raw/main/bai_viet/H%E1%BB%99i%20ngh%E1%BB%8B%20khoa%20h%E1%BB%8Dc%20to%C3%A0n%20qu%E1%BB%91c%20th%C6%B0%E1%BB%9Dng%20ni%C3%AAn%20l%E1%BA%A7n%20th%E1%BB%A9%20V%202026/logo-nha-tai-tro/boston.png" alt="Boston Scientific" class="bg-white border border-gray-200 rounded p-2 object-contain h-auto max-w-[150px]" />
-                <img src="https://github.com/VienViDiAy/publicfiles/raw/main/bai_viet/H%E1%BB%99i%20ngh%E1%BB%8B%20khoa%20h%E1%BB%8Dc%20to%C3%A0n%20qu%E1%BB%91c%20th%C6%B0%E1%BB%9Dng%20ni%C3%AAn%20l%E1%BA%A7n%20th%E1%BB%A9%20V%202026/logo-nha-tai-tro/artivion.png" alt="Artivion" class="bg-white border border-gray-200 rounded p-2 object-contain h-auto max-w-[150px]" />
-                <img src="https://github.com/VienViDiAy/publicfiles/raw/main/bai_viet/H%E1%BB%99i%20ngh%E1%BB%8B%20khoa%20h%E1%BB%8Dc%20to%C3%A0n%20qu%E1%BB%91c%20th%C6%B0%E1%BB%9Dng%20ni%C3%AAn%20l%E1%BA%A7n%20th%E1%BB%A9%20V%202026/logo-nha-tai-tro/golden%20gate.png" alt="Golden Gate" class="bg-white border border-gray-200 rounded p-2 object-contain h-auto max-w-[150px]" />
-                <img src="https://github.com/VienViDiAy/publicfiles/raw/main/bai_viet/H%E1%BB%99i%20ngh%E1%BB%8B%20khoa%20h%E1%BB%8Dc%20to%C3%A0n%20qu%E1%BB%91c%20th%C6%B0%E1%BB%9Dng%20ni%C3%AAn%20l%E1%BA%A7n%20th%E1%BB%A9%20V%202026/logo-nha-tai-tro/tam%20anh.png" alt="Tâm Anh Hospital" class="bg-white border border-gray-200 rounded p-2 object-contain h-auto max-w-[150px]" />
-            </div>
-        </div>
-
-        <div class="mb-4">
-            <h3 class="text-xl font-bold text-gray-900 mb-4 uppercase">ĐỒNG TÀI TRỢ <span class="block text-sm font-normal text-gray-500 mt-1">CO - SPONSORS</span></h3>
-            <div class="flex justify-center items-center flex-wrap gap-5">
-                <img src="https://github.com/VienViDiAy/publicfiles/raw/main/bai_viet/H%E1%BB%99i%20ngh%E1%BB%8B%20khoa%20h%E1%BB%8Dc%20to%C3%A0n%20qu%E1%BB%91c%20th%C6%B0%E1%BB%9Dng%20ni%C3%AAn%20l%E1%BA%A7n%20th%E1%BB%A9%20V%202026/logo-nha-tai-tro/ta%20medical.png" alt="TA Medical" class="bg-white border border-gray-200 rounded p-2 object-contain h-auto max-w-[120px]" />
-                <img src="https://github.com/VienViDiAy/publicfiles/raw/main/bai_viet/H%E1%BB%99i%20ngh%E1%BB%8B%20khoa%20h%E1%BB%8Dc%20to%C3%A0n%20qu%E1%BB%91c%20th%C6%B0%E1%BB%9Dng%20ni%C3%AAn%20l%E1%BA%A7n%20th%E1%BB%A9%20V%202026/logo-nha-tai-tro/jpanli.png" alt="Japan Lifeline" class="bg-white border border-gray-200 rounded p-2 object-contain h-auto max-w-[120px]" />
-                <img src="https://github.com/VienViDiAy/publicfiles/raw/main/bai_viet/H%E1%BB%99i%20ngh%E1%BB%8B%20khoa%20h%E1%BB%8Dc%20to%C3%A0n%20qu%E1%BB%91c%20th%C6%B0%E1%BB%9Dng%20ni%C3%AAn%20l%E1%BA%A7n%20th%E1%BB%A9%20V%202026/logo-nha-tai-tro/terumo.png" alt="Terumo" class="bg-white border border-gray-200 rounded p-2 object-contain h-auto max-w-[120px]" />
-            </div>
-        </div>
     </div>
 </Layout>
