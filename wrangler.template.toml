@@ -4,6 +4,6 @@ main = "src/workers/index.js"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "user-db"
-database_id = "your-database-id-here" # To be replaced with actual D1 id
+database_name = "${CLOUDFLARE_D1_DATABASE_NAME}"
+database_id = "${CLOUDFLARE_D1_DATABASE_ID}"
 migrations_dir = "migrations"

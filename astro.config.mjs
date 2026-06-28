@@ -7,14 +7,13 @@ import react from '@astrojs/react';
 
 import starlight from '@astrojs/starlight';
 import sitemap from '@astrojs/sitemap';
+import { loadEnv } from 'vite';
+
+const env = loadEnv(import.meta.env?.MODE || 'development', process.cwd(), '');
 
 // https://astro.build/config
 export default defineConfig({
-<<<<<<< HEAD
-  site: 'https://my-astro-site.vnvdacloudlear.workers.dev/',
-=======
-  site: 'https://my-astro-site.com',
->>>>>>> f54e89099a896ef7776f2d7258f67586c7e21c48
+  site: env.PUBLIC_SITE_URL || 'https://my-astro-site.com',
   vite: {
     plugins: [tailwindcss()]
   },

@@ -37,87 +37,33 @@ cd <TEN_THU_MOC>
 npm install
 ```
 
-### Bước 2: Cấu hình Cơ sở dữ liệu (Cloudflare D1)
+### Bước 2: Cấu hình bảo mật tập trung (.env)
 
-Dự án sử dụng Cloudflare D1 (SQLite) để lưu trữ thông tin của user.
-1. Đăng nhập vào Cloudflare CLI bằng cách gõ lệnh `npx wrangler login`.
-2. Tạo database mới:
+Hệ thống của chúng tôi được thiết kế để tự động hóa toàn bộ việc cấu hình bảo mật. Bạn không cần phải vào sửa từng file `wrangler.toml` hay `config.yml`.
+
+1. Bạn chỉ cần sao chép file cấu hình mẫu:
    ```bash
-   npx wrangler d1 create user-db
+   cp .env.example .env
    ```
-3. Sau khi chạy, màn hình sẽ hiển thị `database_id`. Hãy mở file `wrangler.toml` và thay thế đoạn `your-database-id-here` bằng ID vừa nhận được:
-   ```toml
-   [[d1_databases]]
-   binding = "DB"
-   database_name = "user-db"
-   database_id = "xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-   migrations_dir = "migrations"
-   ```
-4. Khởi tạo bảng dữ liệu `users` trên máy ảo cục bộ bằng file `schema.sql` có sẵn:
-   ```bash
-   npx wrangler d1 execute user-db --local --file=./schema.sql
-   ```
+2. Mở file `.env` vừa tạo và điền các thông tin của bạn vào đó:
+   - `PUBLIC_SITE_URL`: Domain website của bạn (phục vụ cho sitemap SEO).
+   - `CLOUDFLARE_D1_DATABASE_ID`: (Sẽ có sau khi bạn chạy lệnh `npx wrangler d1 create user-db` để tạo database Cloudflare D1).
+   - `DECAP_GITHUB_REPO`: Đường dẫn kho chứa mã nguồn GitHub (VD: `username/my-astro-site`).
+   - `WORKER_API_URL`: Địa chỉ Cloudflare Worker của bạn dùng làm API Gateway.
+   - `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET`: Sinh ra từ GitHub Developer Settings (dùng để đăng nhập CMS).
+   - `GITHUB_PAT`: Sinh ra từ phần Personal Access Token (tích quyền `repo`) để Worker dùng tải file PDF lên Releases.
+   - `PUBLIC_FIREBASE_*`: Lấy từ dự án Firebase (Authentication) của bạn.
 
-### Bước 3: Cấu hình API Gateway (Cloudflare Worker)
+> **Lưu ý:** Chỉ cần điền các thông số vào `.env`, mỗi khi bạn gõ lệnh `npm run dev`, `npm run dev:worker` hoặc `npm run deploy`, hệ thống sẽ **tự động** sinh ra (Generate) các cấu hình thực tế ẩn ở bên dưới để bảo vệ hoàn toàn khóa bí mật (Secrets) của bạn khỏi việc bị đẩy nhầm lên GitHub.
 
-Worker của bạn đóng vai trò là một API kết nối giữa Frontend và Database.
-1. Mở file `src/workers/index.js`.
-2. Ở phần **GitHub OAuth Flow**, bạn cần cài đặt xác thực để Decap CMS có thể push bài viết lên GitHub. Cấu hình [GitHub OAuth App](https://github.com/settings/developers) và điền Client ID / Client Secret (Nên lưu trong Cloudflare Secrets thay vì ghi trực tiếp vào mã nguồn).
-   Lệnh set biến môi trường ẩn lên Cloudflare:
-   ```bash
-   npx wrangler secret put GITHUB_CLIENT_ID
-   npx wrangler secret put GITHUB_CLIENT_SECRET
-   ```
+Quản trị viên sẽ truy cập vào CMS tại `/admin` để viết bài. Tính năng phân quyền Admin được bảo vệ ở hai tầng:
+- Mọi người đều có thể thấy trang `/admin`, nhưng **chỉ tài khoản GitHub được bạn cấp quyền (Collaborator) vào kho Repo mới đăng nhập và viết bài được**.
+- Phân quyền giao diện cho thành viên sẽ dựa vào cột `role` trong cơ sở dữ liệu Cloudflare D1.
 
-3. Ở phần **API Upload PDF**, bạn cần tạo một [GitHub PAT (Personal Access Token)](https://github.com/settings/tokens) để Cloudflare Worker có quyền upload file thẳng lên kho GitHub của bạn. Hãy làm theo chính xác các bước sau:
-   - **Bước 3.1:** Đăng nhập vào GitHub, góc trên bên phải bấm vào Avatar của bạn > Chọn **Settings** (Cài đặt).
-   - **Bước 3.2:** Cuộn xuống dưới cùng ở menu bên trái, chọn **Developer settings** > **Personal access tokens** > Chọn **Tokens (classic)**.
-   - **Bước 3.3:** Bấm nút **Generate new token (classic)**. Đặt tên (Note) là `Upload PDF Worker`, chọn ngày hết hạn (Expiration) là `No expiration` (nếu không muốn token tự động hỏng sau vài tháng).
-   - **Bước 3.4:** Tại mục **Select scopes**, bạn bắt buộc phải tích chọn mục `repo` (Full control of private repositories). Sau đó kéo xuống dưới cùng và bấm **Generate token**.
-   - **Bước 3.5:** Copy ngay chuỗi mã token vừa hiển thị ra (bạn chỉ thấy nó 1 lần duy nhất).
-   - **Bước 3.6:** Quay lại Terminal của dự án, chạy lệnh dưới đây và dán chuỗi token vừa copy vào khi được hỏi:
-     ```bash
-     npx wrangler secret put GITHUB_PAT
-     ```
-
-### Bước 3b: Cấu hình Firebase Authentication
-Để website cho phép người dùng đăng ký hoặc đăng nhập (Ví dụ bình luận, thành viên VIP):
-1. Truy cập [Firebase Console](https://console.firebase.google.com/), bấm **Add Project**.
-2. Bỏ qua thiết lập Google Analytics (nếu không cần). Bấm tạo dự án.
-3. Trong thanh bên trái, chọn **Build** > **Authentication**. Bấm **Get Started**.
-4. Chuyển sang tab **Sign-in method**, bấm vào nhà cung cấp **Email/Password** và bật tính năng này lên. Bạn cũng có thể bật thêm **Google** nếu muốn.
-5. Trở lại trang chủ dự án Firebase (Project Overview), bấm vào biểu tượng Web (`</>`) để đăng ký ứng dụng Web của bạn. Đặt tên bất kỳ và bấm Register app.
-6. Copy đoạn mã cấu hình `firebaseConfig` được cấp (bao gồm apiKey, authDomain, projectId...). Đoạn cấu hình này sẽ được dán vào các file cấu hình tại Frontend (bên trong mã nguồn Astro) để kích hoạt nút đăng nhập.
-
-### Bước 4: Cấu hình Decap CMS
-
-Quản trị viên sẽ truy cập vào CMS để viết bài. Tính năng phân quyền Admin hoạt động như sau:
-- Mọi người đều có thể truy cập đường dẫn `/admin`, nhưng **chỉ những tài khoản GitHub được bạn cấp quyền (Collaborator) vào kho mã nguồn (Repository) mới có khả năng đăng nhập và viết bài**. Khi họ nhấn "Đăng nhập", hệ thống GitHub OAuth sẽ tự động từ chối những ai không có thẩm quyền.
-- Nếu bạn tích hợp Firebase Auth, bạn có thể tự thay đổi `role` của một user trong bảng `users` của Cloudflare D1 thành `admin` hoặc `vip` thông qua dòng lệnh SQL để cấp các đặc quyền hiển thị riêng trên giao diện Frontend.
-
-Để trỏ CMS về đúng kho lưu trữ (Repo) GitHub của bạn:
-1. Mở file `public/admin/config.yml`.
-2. Thay đổi đường dẫn repo:
-   ```yaml
-   backend:
-     name: github
-     repo: owner/web-frontend  # Hãy đổi thành username/tên-repo của bạn
-     branch: main
-     base_url: https://your-worker-url.workers.dev # Đổi thành URL Worker thực tế của bạn
-   ```
-3. Bạn cũng có thể tùy chỉnh các trường (fields) dữ liệu bài viết tại file này nếu cần thay đổi so với cấu hình mặc định.
-
-### Bước 5: Cấu hình Frontend và SEO
-
-Trang tĩnh của Astro cần một domain cụ thể để tạo sitemap (bản đồ trang web).
-1. Mở file `astro.config.mjs`.
-2. Thay đổi tham số `site` thành tên miền (domain) chính thức của bạn:
-   ```javascript
-   export default defineConfig({
-     site: 'https://my-astro-site.com', // Thay đổi domain tại đây
-     // ...
-   });
-   ```
+Khởi tạo cấu trúc bảng Database trên máy ảo cục bộ bằng lệnh:
+```bash
+npx wrangler d1 execute user-db --local --file=./schema.sql
+```
 
 ---
 
