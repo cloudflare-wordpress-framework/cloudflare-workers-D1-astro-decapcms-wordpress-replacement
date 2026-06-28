@@ -64,7 +64,17 @@ Worker của bạn đóng vai trò là một API kết nối giữa Frontend và
    npx wrangler secret put GITHUB_CLIENT_ID
    npx wrangler secret put GITHUB_CLIENT_SECRET
    ```
-3. Ở phần **API Upload PDF**, bạn cũng cần tạo một [GitHub PAT (Personal Access Token)](https://github.com/settings/tokens) và đưa vào Worker tương tự để uploade file tự động lên mục Releases.
+
+3. Ở phần **API Upload PDF**, bạn cần tạo một [GitHub PAT (Personal Access Token)](https://github.com/settings/tokens) để Cloudflare Worker có quyền upload file thẳng lên kho GitHub của bạn. Hãy làm theo chính xác các bước sau:
+   - **Bước 3.1:** Đăng nhập vào GitHub, góc trên bên phải bấm vào Avatar của bạn > Chọn **Settings** (Cài đặt).
+   - **Bước 3.2:** Cuộn xuống dưới cùng ở menu bên trái, chọn **Developer settings** > **Personal access tokens** > Chọn **Tokens (classic)**.
+   - **Bước 3.3:** Bấm nút **Generate new token (classic)**. Đặt tên (Note) là `Upload PDF Worker`, chọn ngày hết hạn (Expiration) là `No expiration` (nếu không muốn token tự động hỏng sau vài tháng).
+   - **Bước 3.4:** Tại mục **Select scopes**, bạn bắt buộc phải tích chọn mục `repo` (Full control of private repositories). Sau đó kéo xuống dưới cùng và bấm **Generate token**.
+   - **Bước 3.5:** Copy ngay chuỗi mã token vừa hiển thị ra (bạn chỉ thấy nó 1 lần duy nhất).
+   - **Bước 3.6:** Quay lại Terminal của dự án, chạy lệnh dưới đây và dán chuỗi token vừa copy vào khi được hỏi:
+     ```bash
+     npx wrangler secret put GITHUB_PAT
+     ```
 
 ### Bước 4: Cấu hình Decap CMS
 
