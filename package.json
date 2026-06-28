@@ -20,8 +20,7 @@
     "deploy": "npm run setup:env && npm run test:all && npm run build && npm run deploy:database && npm run deploy:worker && npm run deploy:pages",
     "preview": "npm run setup:env && astro preview",
     "astro": "astro",
-    "dev:all": "concurrently \"npm run dev\" \"npm run dev:worker\" \"npm run dev:cms\"",
-    "dev:cms": "decap-server"
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:worker\""
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -45,7 +44,6 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "concurrently": "^10.0.3",
-    "decap-server": "^3.9.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "rimraf": "^6.1.3",
