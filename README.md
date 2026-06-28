@@ -126,16 +126,35 @@ npm run test:all
 ```
 
 ### 3. Triển khai lên môi trường Internet (Deployment)
-Chúng tôi đã gói gọn mọi thao tác deploy phức tạp vào duy nhất 1 nút bấm (1-click deploy). Hãy gõ lệnh sau:
+
+Vì hệ thống thiết kế để sử dụng Free Tier của Cloudflare, bạn có thể triển khai lên **Cloudflare Pages** hoàn toàn miễn phí. Dưới đây là 2 cách để thực hiện:
+
+#### Cách 1: Triển khai tự động qua GitHub (Khuyên dùng)
+Cách này giúp website tự động cập nhật mỗi khi Admin viết bài mới hoặc bạn đẩy code mới lên GitHub.
+- **Bước 1:** Đẩy toàn bộ mã nguồn của dự án này lên một Repository trên GitHub của bạn.
+- **Bước 2:** Đăng nhập vào trang quản trị [Cloudflare Dashboard](https://dash.cloudflare.com).
+- **Bước 3:** Ở thanh menu bên trái, chọn **Workers & Pages**.
+- **Bước 4:** Bấm nút **Create application** (Tạo ứng dụng) > Chuyển sang tab **Pages** > Chọn **Connect to Git** (Kết nối với Git).
+- **Bước 5:** Chọn tài khoản GitHub của bạn và chọn kho lưu trữ (Repository) chứa mã nguồn này. Bấm **Begin setup**.
+- **Bước 6:** Ở phần cấu hình bản dựng (Build settings), điền chính xác như sau:
+  - **Framework preset:** Chọn `Astro`.
+  - **Build command:** `npm run build`
+  - **Build output directory:** `dist`
+- **Bước 7:** Bấm **Save and Deploy**. Đợi vài phút để Cloudflare biên dịch và bạn sẽ nhận được một đường dẫn tên miền miễn phí (ví dụ: `my-astro-site.pages.dev`).
+
+#### Cách 2: Triển khai thủ công bằng dòng lệnh (CLI)
+Nếu bạn không muốn kết nối tự động với GitHub, chúng tôi đã gói gọn mọi thao tác deploy phức tạp vào duy nhất 1 nút bấm từ máy tính của bạn. Hãy gõ lệnh sau:
 ```bash
 npm run deploy
 ```
+*(Lưu ý: Ở lần chạy đầu tiên, Wrangler có thể sẽ yêu cầu bạn xác nhận tạo một project Pages mới, hãy chọn "Create a new project" và nhập tên dự án là `my-astro-site`).*
+
 Hệ thống sẽ chạy chuỗi hành động:
-1. Chạy tất cả bài kiểm tra (Unit Test & SEO Test).
-2. Xóa các file rác và biên dịch (Build) ra các tệp HTML siêu tốc.
-3. Cập nhật mọi thay đổi cơ sở dữ liệu lên Cloudflare D1.
+1. Chạy bài kiểm tra Unit Test & SEO Test.
+2. Xóa rác và biên dịch (Build) ra tệp HTML siêu tốc.
+3. Cập nhật mọi cấu trúc Database lên Cloudflare D1.
 4. Triển khai API mới nhất lên Cloudflare Worker.
-5. Upload và phát hành trang tĩnh của bạn lên Cloudflare Pages.
+5. Đẩy thẳng thư mục `dist` lên Cloudflare Pages.
 
 ---
 
