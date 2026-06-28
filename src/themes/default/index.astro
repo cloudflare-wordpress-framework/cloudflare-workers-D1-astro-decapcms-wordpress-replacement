@@ -5,11 +5,25 @@ import { Button } from '@/components/ui/button';
 import Comment from '../../plugins/plugin-comment-system/Comment.astro';
 import config from '../../plugins/plugins.config.json';
 
-const posts = [
-  { title: "Hướng dẫn tối ưu hóa SEO với Astro", desc: "Khám phá các kỹ thuật tăng tốc độ tải trang và SEO On-page cho hệ thống SSG.", date: "2024-01-01", image: "https://via.placeholder.com/600x400?text=SEO+Astro" },
-  { title: "Chuyển đổi WordPress sang Jamstack", desc: "Lợi ích tuyệt vời của việc rời bỏ PHP và MySQL để chuyển sang kiến trúc tĩnh hoàn toàn.", date: "2024-01-02", image: "https://via.placeholder.com/600x400?text=WordPress+to+Jamstack" },
-  { title: "Cách sử dụng Cloudflare D1", desc: "Thiết lập cơ sở dữ liệu SQLite chạy trực tiếp trên Edge của Cloudflare.", date: "2024-01-05", image: "https://via.placeholder.com/600x400?text=Cloudflare+D1" },
-];
+let posts: any[] = [];
+try {
+  // @ts-ignore: Astro.glob is available in Astro components but types might not be perfectly inferred here
+  const allPosts = await Astro.glob('../../pages/posts/*.md');
+  posts = allPosts.map((post: any) => ({
+    title: post.frontmatter.title,
+    desc: post.frontmatter.desc,
+    date: post.frontmatter.date,
+    image: post.frontmatter.image,
+    url: post.url
+  }));
+} catch (e) {
+  // Fallback if no posts
+  posts = [
+    { title: "Hướng dẫn tối ưu hóa SEO với Astro", desc: "Khám phá các kỹ thuật tăng tốc độ tải trang và SEO On-page cho hệ thống SSG.", date: "2024-01-01", image: "https://via.placeholder.com/600x400?text=SEO+Astro", url: "/posts/huong-dan-seo" },
+    { title: "Chuyển đổi WordPress sang Jamstack", desc: "Lợi ích tuyệt vời của việc rời bỏ PHP và MySQL để chuyển sang kiến trúc tĩnh hoàn toàn.", date: "2024-01-02", image: "https://via.placeholder.com/600x400?text=WordPress+to+Jamstack", url: "/posts/chuyen-doi-wordpress" },
+    { title: "Cách sử dụng Cloudflare D1", desc: "Thiết lập cơ sở dữ liệu SQLite chạy trực tiếp trên Edge của Cloudflare.", date: "2024-01-05", image: "https://via.placeholder.com/600x400?text=Cloudflare+D1", url: "/posts/cloudflare-d1" },
+  ];
+}
 
 const isCommentActive = config.active_plugins.includes('plugin-comment-system');
 ---
@@ -40,20 +54,22 @@ const isCommentActive = config.active_plugins.includes('plugin-comment-system');
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {posts.map(post => (
+      {posts.map((post: any) => (
         <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col">
-          <img src={post.image} alt={post.title} class="w-full h-48 object-cover border-b" />
+          <a href={post.url} class="block">
+            <img src={post.image} alt={post.title} class="w-full h-48 object-cover border-b" />
+          </a>
           <CardHeader>
             <div class="text-xs text-blue-600 font-semibold mb-1">{post.date}</div>
             <CardTitle className="text-xl leading-tight line-clamp-2 hover:text-blue-600 transition-colors">
-              <a href="#">{post.title}</a>
+              <a href={post.url}>{post.title}</a>
             </CardTitle>
           </CardHeader>
           <CardContent className="flex-1">
             <p class="text-gray-600 text-sm line-clamp-3">{post.desc}</p>
           </CardContent>
           <CardFooter className="pt-0">
-            <a href="#" class="text-sm font-medium text-gray-900 hover:text-blue-600 flex items-center gap-1">
+            <a href={post.url} class="text-sm font-medium text-gray-900 hover:text-blue-600 flex items-center gap-1">
               Đọc tiếp
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>

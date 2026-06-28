@@ -2,12 +2,26 @@
 import Layout from './Layout.astro';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
-const news = [
-  { title: "Hội nghị khoa học toàn quốc Hội Bệnh Mạch Máu Việt Nam 2024", date: "15/10/2023", image: "https://via.placeholder.com/600x400?text=Hoi+Nghi+Mach+Mau" },
-  { title: "Cập nhật Hướng dẫn chẩn đoán và điều trị bệnh động mạch ngoại biên", date: "02/11/2023", image: "https://via.placeholder.com/600x400?text=Huong+Dan+Dieu+Tri" },
-  { title: "Sinh hoạt khoa học chuyên đề: Phình động mạch chủ bụng", date: "20/11/2023", image: "https://via.placeholder.com/600x400?text=Sinh+Hoat+Khoa+Hoc" },
-  { title: "Thông báo nộp phí hội viên năm 2024", date: "05/12/2023", image: "https://via.placeholder.com/600x400?text=Thong+Bao" },
-];
+let news: any[] = [];
+try {
+  // @ts-ignore: Astro.glob is available in Astro components but types might not be perfectly inferred here
+  const allPosts = await Astro.glob('../../pages/posts/*.md');
+  news = allPosts.map((post: any) => ({
+    title: post.frontmatter.title,
+    desc: post.frontmatter.desc,
+    date: post.frontmatter.date,
+    image: post.frontmatter.image,
+    url: post.url
+  }));
+} catch (e) {
+  // Fallback if no posts
+  news = [
+    { title: "Hội nghị khoa học toàn quốc Hội Bệnh Mạch Máu Việt Nam 2024", date: "15/10/2023", image: "https://via.placeholder.com/600x400?text=Hoi+Nghi+Mach+Mau", url: "#" },
+    { title: "Cập nhật Hướng dẫn chẩn đoán và điều trị bệnh động mạch ngoại biên", date: "02/11/2023", image: "https://via.placeholder.com/600x400?text=Huong+Dan+Dieu+Tri", url: "#" },
+    { title: "Sinh hoạt khoa học chuyên đề: Phình động mạch chủ bụng", date: "20/11/2023", image: "https://via.placeholder.com/600x400?text=Sinh+Hoat+Khoa+Hoc", url: "#" },
+    { title: "Thông báo nộp phí hội viên năm 2024", date: "05/12/2023", image: "https://via.placeholder.com/600x400?text=Thong+Bao", url: "#" },
+  ];
+}
 ---
 
 <Layout>
@@ -23,7 +37,7 @@ const news = [
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {news.map((item, index) => {
+                {news.map((item: any, index: number) => {
                     // Bài viết đầu tiên làm nổi bật
                     if(index === 0) {
                         return (
@@ -32,7 +46,7 @@ const news = [
                                 <div class="absolute bottom-0 w-full bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent p-6">
                                     <div class="text-red-400 text-sm font-bold mb-2">{item.date}</div>
                                     <h2 class="text-2xl font-bold text-white leading-snug">
-                                        <a href="#" class="hover:text-red-300">{item.title}</a>
+                                        <a href={item.url} class="hover:text-red-300">{item.title}</a>
                                     </h2>
                                 </div>
                             </div>
@@ -42,15 +56,17 @@ const news = [
                     // Các bài viết bình thường
                     return (
                         <Card className="hover:shadow-md transition-shadow overflow-hidden bg-white border-gray-200">
-                            <img src={item.image} alt={item.title} class="w-full h-40 object-cover border-b" />
+                            <a href={item.url} class="block">
+                                <img src={item.image} alt={item.title} class="w-full h-40 object-cover border-b" />
+                            </a>
                             <CardHeader className="p-4 pb-2">
                                 <div class="text-xs text-gray-500 font-medium mb-1">📅 {item.date}</div>
                                 <CardTitle className="text-base leading-snug line-clamp-2">
-                                    <a href="#" class="hover:text-red-600 transition-colors text-gray-800">{item.title}</a>
+                                    <a href={item.url} class="hover:text-red-600 transition-colors text-gray-800">{item.title}</a>
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="p-4 pt-0">
-                                <p class="text-sm text-gray-600 line-clamp-2">Nội dung tóm tắt của tin tức. Hãy bấm vào để xem chi tiết đầy đủ cập nhật y khoa và thông báo mới nhất.</p>
+                                <p class="text-sm text-gray-600 line-clamp-2">{item.desc || "Nội dung tóm tắt của tin tức. Hãy bấm vào để xem chi tiết đầy đủ cập nhật y khoa và thông báo mới nhất."}</p>
                             </CardContent>
                         </Card>
                     )
