@@ -45,14 +45,45 @@ Hệ thống của chúng tôi được thiết kế để tự động hóa to�
    ```bash
    cp .env.example .env
    ```
-2. Mở file `.env` vừa tạo và điền các thông tin của bạn vào đó:
-   - `PUBLIC_SITE_URL`: Domain website của bạn (phục vụ cho sitemap SEO).
-   - `CLOUDFLARE_D1_DATABASE_ID`: (Sẽ có sau khi bạn chạy lệnh `npx wrangler d1 create user-db` để tạo database Cloudflare D1).
-   - `DECAP_GITHUB_REPO`: Đường dẫn kho chứa mã nguồn GitHub (VD: `username/my-astro-site`).
-   - `WORKER_API_URL`: Địa chỉ Cloudflare Worker của bạn dùng làm API Gateway.
-   - `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET`: Sinh ra từ GitHub Developer Settings (dùng để đăng nhập CMS).
-   - `GITHUB_PAT`: Sinh ra từ phần Personal Access Token (tích quyền `repo`) để Worker dùng tải file PDF lên Releases.
-   - `PUBLIC_FIREBASE_*`: Lấy từ dự án Firebase (Authentication) của bạn.
+2. Mở file `.env` vừa tạo và điền các thông tin của bạn vào đó. Dưới đây là **hướng dẫn chi tiết từng bước** để lấy các thông tin này:
+
+   - **`PUBLIC_SITE_URL`**: Domain website của bạn (phục vụ cho sitemap SEO). Khi phát triển cục bộ, bạn có thể để `http://localhost:4321`. Khi đưa lên mạng, đổi thành tên miền thực (VD: `https://my-astro-site.pages.dev`).
+
+   - **`CLOUDFLARE_D1_DATABASE_ID`**:
+     - Chạy lệnh sau trong terminal: `npx wrangler d1 create user-db` (Yêu cầu bạn phải đăng nhập vào Cloudflare trước bằng `npx wrangler login`).
+     - Terminal sẽ in ra một bảng thông tin, copy chuỗi ký tự ở cột `database_id` và dán vào đây.
+
+   - **`DECAP_GITHUB_REPO`**:
+     - Đây là đường dẫn kho chứa mã nguồn GitHub của bạn.
+     - Ví dụ: Nếu link repo của bạn là `https://github.com/nguyenvana/my-website`, hãy điền `nguyenvana/my-website`.
+
+   - **`WORKER_API_URL`**:
+     - Khi chạy cục bộ trên máy tính (Local), hãy điền: `http://localhost:8787`.
+     - Khi chạy thực tế trên mạng (Production), hãy điền đường dẫn Worker của bạn (VD: `https://my-worker.nguyenvana.workers.dev`). Lấy link này sau khi bạn chạy lệnh `npm run deploy:worker`.
+
+   - **`GITHUB_CLIENT_ID` và `GITHUB_CLIENT_SECRET`**:
+     - Truy cập GitHub: [Settings > Developer settings > OAuth Apps](https://github.com/settings/developers).
+     - Bấm **New OAuth App**.
+     - *Application name*: Tên bất kỳ (VD: My Astro CMS).
+     - *Homepage URL*: Điền `http://localhost:8787` (nếu chạy local) hoặc link Worker thực tế của bạn.
+     - *Authorization callback URL*: Thêm `/callback` vào cuối Homepage URL. (VD: `http://localhost:8787/callback`).
+     - Bấm **Register application**.
+     - Copy `Client ID` dán vào `GITHUB_CLIENT_ID`.
+     - Bấm **Generate a new client secret**, copy mã bí mật đó dán vào `GITHUB_CLIENT_SECRET`.
+
+   - **`GITHUB_PAT` (Personal Access Token)**:
+     - Truy cập GitHub: [Settings > Developer settings > Personal access tokens > Tokens (classic)](https://github.com/settings/tokens).
+     - Bấm **Generate new token (classic)**.
+     - Trong phần *Note*, điền tên để dễ nhớ. Ở mục *Expiration*, chọn No expiration hoặc tùy ý.
+     - Ở mục *Select scopes*, **đánh dấu tích vào ô `repo`** (Full control of private repositories).
+     - Bấm **Generate token**, copy dãy ký tự bắt đầu bằng `ghp_` và dán vào `GITHUB_PAT`.
+
+   - **`PUBLIC_FIREBASE_*` (Tùy chọn)**:
+     - Truy cập [Firebase Console](https://console.firebase.google.com/), tạo một dự án mới.
+     - Trong dự án, chọn biểu tượng Web (</>) để thêm ứng dụng web mới.
+     - Copy cấu hình `firebaseConfig` được cung cấp.
+     - Dán lần lượt `apiKey` vào `PUBLIC_FIREBASE_API_KEY`, `authDomain` vào `PUBLIC_FIREBASE_AUTH_DOMAIN`, và `projectId` vào `PUBLIC_FIREBASE_PROJECT_ID`.
+     - (Đừng quên vào menu **Authentication** trong Firebase để bật phương thức đăng nhập Email/Password hoặc Google).
 
 > **Lưu ý:** Chỉ cần điền các thông số vào `.env`, mỗi khi bạn gõ lệnh `npm run dev`, `npm run dev:worker` hoặc `npm run deploy`, hệ thống sẽ **tự động** sinh ra (Generate) các cấu hình thực tế ẩn ở bên dưới để bảo vệ hoàn toàn khóa bí mật (Secrets) của bạn khỏi việc bị đẩy nhầm lên GitHub.
 

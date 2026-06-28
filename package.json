@@ -19,7 +19,8 @@
     "deploy:pages": "wrangler pages deploy dist --project-name=my-astro-site",
     "deploy": "npm run setup:env && npm run test:all && npm run build && npm run deploy:database && npm run deploy:worker && npm run deploy:pages",
     "preview": "npm run setup:env && astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:worker\""
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -42,6 +43,7 @@
     "@astrojs/react": "^6.0.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "concurrently": "^10.0.3",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "rimraf": "^6.1.3",
