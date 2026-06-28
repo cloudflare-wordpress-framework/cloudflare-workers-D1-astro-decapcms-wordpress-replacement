@@ -1,0 +1,19 @@
+backend:
+  name: github
+  repo: owner/web-frontend # Update this to your repo
+  branch: main # Branch to update
+  base_url: https://your-worker-url.workers.dev # Update to your worker URL for OAuth
+
+media_folder: "public/images" # Folder where uploaded files will be saved
+public_folder: "/images"
+
+collections:
+  - name: "posts"
+    label: "Posts"
+    folder: "src/pages/posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Body", name: "body", widget: "markdown" }

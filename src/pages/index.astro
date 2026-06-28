@@ -1,11 +1,33 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import { Button } from '@/components/ui/button';
+import Comment from '../plugins/plugin-comment-system/Comment.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const posts = [
+  { title: "Bài viết mẫu 1", desc: "Mô tả bài viết đầu tiên.", date: "2024-01-01" },
+  { title: "Bài viết mẫu 2", desc: "Mô tả bài viết thứ hai.", date: "2024-01-02" },
+];
 ---
-
 <Layout>
-	<Welcome />
+  <main class="max-w-4xl mx-auto p-4 space-y-8">
+    <h1 class="text-3xl font-bold">Danh sách bài viết</h1>
+
+    <div class="flex gap-4">
+      <Button>Tạo Bài Mới</Button>
+      <Button variant="outline">Cài đặt User</Button>
+    </div>
+
+    <ul class="space-y-4">
+      {posts.map(post => (
+        <li class="border p-4 rounded shadow-sm">
+          <h2 class="text-xl font-semibold">{post.title}</h2>
+          <p class="text-gray-600 text-sm mb-2">{post.date}</p>
+          <p>{post.desc}</p>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Nhúng Plugin Comment Test -->
+    <Comment />
+  </main>
 </Layout>

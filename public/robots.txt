@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://my-astro-site.com/sitemap-index.xml
