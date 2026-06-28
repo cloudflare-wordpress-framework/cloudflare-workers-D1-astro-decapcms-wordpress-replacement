@@ -8,6 +8,22 @@ media_folder: "public/images" # Folder where uploaded files will be saved
 public_folder: "/images"
 
 collections:
+  - name: "settings"
+    label: "Settings"
+    files:
+      - label: "Slider Cài Đặt"
+        name: "slider"
+        file: "src/data/slider.json"
+        fields:
+          - label: "Slides"
+            name: "slides"
+            widget: "list"
+            fields:
+              - { label: "Tiêu đề", name: "title", widget: "string" }
+              - { label: "Ảnh (URL/Upload)", name: "image", widget: "image" }
+              - { label: "Đường dẫn liên kết", name: "link", widget: "string", required: false }
+              - { label: "Mô tả", name: "description", widget: "string", required: false }
+
   - name: "posts"
     label: "Posts"
     folder: "src/pages/posts"

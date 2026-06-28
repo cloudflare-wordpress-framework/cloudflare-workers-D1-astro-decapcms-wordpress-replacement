@@ -1,5 +1,6 @@
 {
   "active_plugins": [
-    "plugin-comment-system"
+    "plugin-comment-system",
+    "plugin-slider"
   ]
 }

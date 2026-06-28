@@ -1,6 +1,11 @@
 ---
 import Layout from './Layout.astro';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import pluginsConfig from '../../plugins/plugins.config.json';
+
+const Slider = pluginsConfig.active_plugins.includes('plugin-slider')
+  ? (await import('../../plugins/plugin-slider/Slider.astro')).default
+  : null;
 
 const news = [
   { title: "Hội nghị khoa học toàn quốc Hội Bệnh Mạch Máu Việt Nam 2024", date: "15/10/2023", image: "https://via.placeholder.com/600x400?text=Hoi+Nghi+Mach+Mau" },
@@ -11,6 +16,7 @@ const news = [
 ---
 
 <Layout>
+    {Slider && <Slider />}
     <div class="flex flex-col lg:flex-row gap-8">
 
         <!-- Cột nội dung chính (70%) -->
