@@ -36,7 +36,7 @@ const isCommentActive = config.active_plugins.includes('plugin-comment-system');
   <section class="mb-16">
     <div class="flex items-center justify-between mb-8">
       <h2 class="text-2xl font-bold text-gray-900 border-l-4 border-blue-600 pl-3">Bài viết mới nhất</h2>
-      <a href="/admin/cms.html" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Xem tất cả &rarr;</a>
+      <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Xem tất cả &rarr;</a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -46,14 +46,14 @@ const isCommentActive = config.active_plugins.includes('plugin-comment-system');
           <CardHeader>
             <div class="text-xs text-blue-600 font-semibold mb-1">{post.date}</div>
             <CardTitle className="text-xl leading-tight line-clamp-2 hover:text-blue-600 transition-colors">
-              <a href="/admin/cms.html">{post.title}</a>
+              <a href="#">{post.title}</a>
             </CardTitle>
           </CardHeader>
           <CardContent className="flex-1">
             <p class="text-gray-600 text-sm line-clamp-3">{post.desc}</p>
           </CardContent>
           <CardFooter className="pt-0">
-            <a href="/admin/cms.html" class="text-sm font-medium text-gray-900 hover:text-blue-600 flex items-center gap-1">
+            <a href="#" class="text-sm font-medium text-gray-900 hover:text-blue-600 flex items-center gap-1">
               Đọc tiếp
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>
