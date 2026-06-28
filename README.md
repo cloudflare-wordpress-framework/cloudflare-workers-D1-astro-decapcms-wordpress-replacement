@@ -2,12 +2,16 @@
 
 Đây là dự án hoàn chỉnh nhằm chuyển đổi hệ thống website từ WordPress sang kiến trúc Jamstack tĩnh hoàn toàn, giúp tối ưu chi phí (0 đồng hạ tầng), tối đa hóa điểm SEO (Lighthouse 100/100) và gia tăng bảo mật.
 
-Hệ thống được thiết kế theo hướng **Decoupled**:
-- **Frontend:** Astro + Tailwind CSS + Shadcn UI.
-- **CMS:** Decap CMS kết nối qua GitHub (Lưu ảnh trên Repo GitHub).
-- **Database:** Cloudflare D1 (Lưu thông tin Users).
-- **API/Backend:** Cloudflare Workers.
-- **Storage/Media:** GitHub Repo cho ảnh và GitHub Releases cho PDF.
+### 🏗 Kiến trúc hệ thống và Luồng hoạt động (Architecture)
+
+Hệ thống được thiết kế theo mô hình **Tách rời hoàn toàn (Decoupled)** nhằm tận dụng tối đa gói miễn phí (Free Tier) của nhiều nền tảng kết hợp lại:
+
+- **Cloudflare Pages (Frontend Hosting):** Chứa file HTML tĩnh (SSG) của Astro. Khách vãng lai đọc bài sẽ tải file trực tiếp từ đây. **Tần suất gọi API Worker là 0** giúp bạn không bao giờ vượt qua giới hạn miễn phí.
+- **Decap CMS + GitHub (Quản lý nội dung):** Decap CMS (giao diện Admin) chạy thẳng trên trình duyệt của bạn. Khi viết bài xong, nó sẽ tự động đẩy (commit) một file Markdown lên GitHub. Cloudflare Pages sẽ nhận tín hiệu này và tự động biên dịch lại website. Ảnh cũng được đẩy trực tiếp lên kho chứa GitHub.
+- **Cloudflare D1 (Database SQL Miễn phí):** Một hệ quản trị cơ sở dữ liệu siêu nhẹ được dùng để lưu trữ thông tin "Thành viên" (Users) của hệ thống.
+- **Cloudflare Workers (Cầu nối API Gateway):** Đóng vai trò là hệ thống Backend xử lý logic động (Ví dụ: Nhận mã Token từ Firebase, lưu User xuống D1, hoặc nhận file PDF và tải lên GitHub Releases).
+- **GitHub Releases (Storage lớn):** Dùng để chứa các file lớn (như PDF < 10MB) bằng cách tận dụng API tạo Release ẩn để người dùng được phép tải miễn phí băng thông cao.
+- **Firebase Auth (Xác thực đăng nhập):** Xử lý đăng nhập an toàn bằng Email/Mật khẩu hoặc Google. Thay vì tốn phí tự xây dựng luồng bảo mật, Firebase Auth gói Free Tier xử lý hoàn toàn cho chúng ta. Nó sẽ gửi một `idToken` lên Worker để lưu user vào hệ thống.
 
 ---
 
@@ -75,6 +79,15 @@ Worker của bạn đóng vai trò là một API kết nối giữa Frontend và
      ```bash
      npx wrangler secret put GITHUB_PAT
      ```
+
+### Bước 3b: Cấu hình Firebase Authentication
+Để website cho phép người dùng đăng ký hoặc đăng nhập (Ví dụ bình luận, thành viên VIP):
+1. Truy cập [Firebase Console](https://console.firebase.google.com/), bấm **Add Project**.
+2. Bỏ qua thiết lập Google Analytics (nếu không cần). Bấm tạo dự án.
+3. Trong thanh bên trái, chọn **Build** > **Authentication**. Bấm **Get Started**.
+4. Chuyển sang tab **Sign-in method**, bấm vào nhà cung cấp **Email/Password** và bật tính năng này lên. Bạn cũng có thể bật thêm **Google** nếu muốn.
+5. Trở lại trang chủ dự án Firebase (Project Overview), bấm vào biểu tượng Web (`</>`) để đăng ký ứng dụng Web của bạn. Đặt tên bất kỳ và bấm Register app.
+6. Copy đoạn mã cấu hình `firebaseConfig` được cấp (bao gồm apiKey, authDomain, projectId...). Đoạn cấu hình này sẽ được dán vào các file cấu hình tại Frontend (bên trong mã nguồn Astro) để kích hoạt nút đăng nhập.
 
 ### Bước 4: Cấu hình Decap CMS
 
@@ -160,9 +173,25 @@ Hệ thống sẽ chạy chuỗi hành động:
 
 ## 🧩 Cấu trúc hệ thống Plugin
 
-Dự án hỗ trợ một hệ thống plugin nhằm thay thế các Plugin truyền thống của WordPress.
-- Mã nguồn các plugin nằm tại: `src/plugins/`
-- Bạn có thể bật/tắt tính năng bổ sung (ví dụ: bình luận, phân tích truy cập, popup) bằng cách chỉnh sửa file `src/plugins/plugins.config.json` và thay đổi mảng `active_plugins`. Mọi thay đổi đều được hệ thống biên dịch lại dưới dạng tĩnh hoàn toàn, giữ vững tốc độ của website.
+Dự án hỗ trợ một hệ thống Plugin kiến trúc tĩnh (Static System) nhằm thay thế mô hình cài đặt các file mã nguồn `.zip` động truyền thống của WordPress.
+
+### Plugin là gì trong dự án này?
+Vì toàn bộ trang web được Astro biên dịch trước thành các file HTML siêu nhanh tĩnh (SSG), các "Plugin" ở đây thực chất là các Module hoặc Component chức năng được viết sẵn (Bằng Astro, React, v.v.). Hệ thống sẽ quyết định nhúng các Module này vào toàn bộ bài viết (hoặc các trang được cấu hình) **trong thời điểm chạy Build (Biên dịch)**, chứ không gọi động mỗi khi có người truy cập trang.
+
+Mã nguồn các plugin được lưu sẵn tại thư mục: `src/plugins/`
+
+### Cách hoạt động và sử dụng:
+1. Bạn có thể bật/tắt bất kỳ tính năng bổ sung nào (như **Bình luận tĩnh Giscus**, **Google Analytics**, **Popup Newsletter**) bằng cách truy cập vào trang Cài đặt trong trang quản trị `/admin`. (hoặc sửa file cứng tại `src/plugins/plugins.config.json`).
+   ```json
+   {
+     "active_plugins": [
+       "plugin-comment-system",
+       "plugin-google-analytics"
+     ]
+   }
+   ```
+2. Một khi bạn kích hoạt hoặc tắt một Plugin, bạn sẽ nhấn nút `npm run deploy` (hoặc nó sẽ tự động chạy qua GitHub Action).
+3. Astro sẽ đọc file cấu hình JSON phía trên và tự động **loại bỏ hoặc chèn** mã của các Plugin đó vào trang HTML cuối cùng. Do đó, việc cài 10 plugin cũng không làm tốn thêm Server CPU so với không cài plugin nào, giúp trang web cực kỳ bảo mật và đạt 100/100 điểm hiệu suất.
 
 ---
 **Chúc bạn phát triển thành công trang Jamstack tối ưu!**
