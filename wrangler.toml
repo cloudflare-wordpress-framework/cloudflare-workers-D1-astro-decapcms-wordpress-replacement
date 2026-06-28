@@ -3,7 +3,7 @@ compatibility_date = "2024-11-20"
 main = "src/workers/index.js"
 
 [[d1_databases]]
-binding = "DB"
+binding = "user_db"
 database_name = "user-db"
-database_id = "your-database-id-here" # To be replaced with actual D1 id
+database_id = "e15a74e9-ed9c-4e4c-b2c7-9a19be61eb06"
 migrations_dir = "migrations"
