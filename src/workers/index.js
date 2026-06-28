@@ -43,10 +43,15 @@ export default {
             <title>Authentication Success</title>
           </head>
           <body>
+            <p>Authentication successful! Redirecting to CMS...</p>
             <script>
               const msg = 'authorization:github:success:{"token":"${accessToken}","provider":"github"}';
+              console.log("Sending auth message to opener:", msg);
               window.opener.postMessage(msg, '*');
-              window.close();
+              // Delay close to ensure message is dispatched
+              setTimeout(() => {
+                window.close();
+              }, 500);
             </script>
           </body>
           </html>
