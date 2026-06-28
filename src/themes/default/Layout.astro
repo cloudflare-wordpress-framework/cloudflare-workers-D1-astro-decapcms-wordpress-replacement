@@ -1,0 +1,61 @@
+---
+import '../../styles/global.css';
+---
+
+<!doctype html>
+<html lang="vi">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Jamstack Blog</title>
+	</head>
+	<body class="bg-slate-100 text-gray-900 font-sans min-h-screen flex flex-col">
+		<!-- Header -->
+		<header class="bg-white shadow-sm sticky top-0 z-50">
+			<div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+				<!-- Logo -->
+				<a href="/" class="text-2xl font-bold text-blue-600 tracking-tight">
+					Jamstack<span class="text-gray-800">Blog</span>
+				</a>
+
+				<!-- Navigation -->
+				<nav class="hidden md:flex gap-6 text-sm font-medium">
+					<a href="/" class="text-gray-600 hover:text-blue-600 transition-colors">Trang chủ</a>
+					<a href="/" class="text-gray-600 hover:text-blue-600 transition-colors">Bài viết</a>
+					<a href="/" class="text-gray-600 hover:text-blue-600 transition-colors">Giới thiệu</a>
+					<a href="/admin" class="text-blue-600 hover:text-blue-800 transition-colors">Đăng nhập Admin</a>
+				</nav>
+
+				<!-- Mobile menu button (placeholder) -->
+				<button class="md:hidden text-gray-500 hover:text-gray-700">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+				</button>
+			</div>
+		</header>
+
+		<!-- Main Content -->
+		<main class="flex-1 w-full max-w-6xl mx-auto p-4 md:p-6 lg:py-10">
+			<slot />
+		</main>
+
+		<!-- Footer -->
+		<footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm">
+			<div class="max-w-6xl mx-auto px-4">
+				<p>&copy; {new Date().getFullYear()} Jamstack Blog. All rights reserved.</p>
+				<p class="mt-2">Được xây dựng với Astro, Tailwind CSS và Shadcn UI.</p>
+			</div>
+		</footer>
+	</body>
+</html>
+
+<style>
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		height: 100%;
+	}
+</style>
