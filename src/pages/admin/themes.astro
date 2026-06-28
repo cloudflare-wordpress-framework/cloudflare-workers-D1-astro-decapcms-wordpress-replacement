@@ -1,0 +1,38 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { Card, CardContent } from '@/components/ui/card';
+
+const themes = [
+  { name: "Default Jamstack", author: "Jules", active: true, image: "https://via.placeholder.com/400x250?text=Default+Theme" },
+  { name: "Minimal Blog", author: "Studio", active: false, image: "https://via.placeholder.com/400x250?text=Minimal+Blog" },
+  { name: "Dark Magazine", author: "Creative", active: false, image: "https://via.placeholder.com/400x250?text=Dark+Magazine" },
+];
+---
+<AdminLayout>
+  <div class="mb-8 flex justify-between items-center">
+    <div>
+      <h1 class="text-2xl font-bold">Giao diện</h1>
+      <p class="text-gray-500">Quản lý và tùy chỉnh giao diện trang web.</p>
+    </div>
+    <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">Thêm giao diện mới</button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {themes.map(theme => (
+      <Card className="overflow-hidden border group">
+        <img src={theme.image} alt={theme.name} class="w-full h-48 object-cover border-b" />
+        <CardContent className="p-4 bg-white flex justify-between items-center">
+          <div>
+            <h3 class="font-bold text-lg">{theme.name}</h3>
+            <p class="text-sm text-gray-500">bởi {theme.author}</p>
+          </div>
+          {theme.active ? (
+             <span class="bg-gray-800 text-white text-xs px-2 py-1 rounded">Đang kích hoạt</span>
+          ) : (
+             <button class="border border-blue-600 text-blue-600 text-sm px-3 py-1 rounded hover:bg-blue-50 transition-colors opacity-0 group-hover:opacity-100">Kích hoạt</button>
+          )}
+        </CardContent>
+      </Card>
+    ))}
+  </div>
+</AdminLayout>

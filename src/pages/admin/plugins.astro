@@ -1,0 +1,52 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import config from '../../plugins/plugins.config.json';
+
+const allPlugins = [
+  { id: "plugin-comment-system", name: "Hệ thống Bình luận Giscus", desc: "Hiển thị bình luận tĩnh thông qua GitHub Discussions", version: "1.0.0" },
+  { id: "plugin-google-analytics", name: "Google Analytics", desc: "Theo dõi lượng truy cập web", version: "2.1.0" },
+  { id: "plugin-newsletter-popup", name: "Newsletter Popup", desc: "Hiển thị popup thu thập email khách hàng", version: "1.0.5" },
+];
+---
+<AdminLayout>
+  <div class="mb-8 flex justify-between items-center">
+    <div>
+      <h1 class="text-2xl font-bold">Gói mở rộng (Plugins)</h1>
+      <p class="text-gray-500">Bật hoặc tắt các tính năng bổ sung.</p>
+    </div>
+    <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">Tải lên Plugin</button>
+  </div>
+
+  <div class="bg-white border rounded shadow-sm">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-gray-50 border-b">
+        <tr>
+          <th class="p-4 font-medium text-gray-600">Tên Plugin</th>
+          <th class="p-4 font-medium text-gray-600">Mô tả</th>
+          <th class="p-4 font-medium text-gray-600">Hành động</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y">
+        {allPlugins.map(plugin => {
+          const isActive = config.active_plugins.includes(plugin.id);
+          return (
+            <tr class={isActive ? 'bg-blue-50/30' : ''}>
+              <td class="p-4">
+                <div class="font-bold">{plugin.name}</div>
+                <div class="text-gray-500 text-xs mt-1">Phiên bản {plugin.version}</div>
+              </td>
+              <td class="p-4 text-gray-600">{plugin.desc}</td>
+              <td class="p-4">
+                {isActive ? (
+                  <button class="text-red-600 hover:text-red-800 font-medium">Ngừng kích hoạt</button>
+                ) : (
+                  <button class="text-blue-600 hover:text-blue-800 font-medium">Kích hoạt</button>
+                )}
+              </td>
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
+  </div>
+</AdminLayout>

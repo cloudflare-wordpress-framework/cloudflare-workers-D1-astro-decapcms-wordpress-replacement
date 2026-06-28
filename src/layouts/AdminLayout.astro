@@ -1,0 +1,75 @@
+---
+import '../styles/global.css';
+import { Home, FileText, Image, LayoutTemplate, Puzzle, Users, Settings } from 'lucide-react';
+
+const currentPath = Astro.url.pathname;
+const menuItems = [
+  { name: 'Bảng tin', path: '/admin', icon: Home },
+  { name: 'Bài viết', path: '/admin/cms.html', icon: FileText, external: true },
+  { name: 'Thư viện', path: '#', icon: Image },
+  { name: 'Giao diện', path: '/admin/themes', icon: LayoutTemplate },
+  { name: 'Gói mở rộng', path: '/admin/plugins', icon: Puzzle },
+  { name: 'Thành viên', path: '#', icon: Users },
+  { name: 'Cài đặt', path: '/admin/settings', icon: Settings },
+];
+---
+
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+  </head>
+  <body class="bg-gray-100 min-h-screen flex text-gray-900">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-900 text-white flex-shrink-0 min-h-screen flex flex-col">
+      <div class="p-4 bg-gray-950 font-bold text-xl tracking-wide flex items-center gap-2">
+        <span>⚙️</span> Jamstack Admin
+      </div>
+      <nav class="flex-1 py-4">
+        <ul class="space-y-1">
+          {menuItems.map((item) => {
+            const isActive = currentPath === item.path || currentPath === item.path + '/';
+            return (
+              <li>
+                <a
+                  href={item.path}
+                  class={`flex items-center gap-3 px-4 py-3 hover:bg-gray-800 transition-colors ${isActive ? 'bg-blue-600 border-l-4 border-blue-400' : 'border-l-4 border-transparent'}`}
+                  target={item.external ? '_blank' : '_self'}
+                >
+                  <item.icon className="w-5 h-5 text-gray-400" />
+                  <span class={isActive ? 'font-semibold text-white' : 'text-gray-300'}>{item.name}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+      <div class="p-4 text-xs text-gray-500 bg-gray-950 text-center">
+        Phiên bản 1.0.0
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-h-screen overflow-hidden">
+      <!-- Topbar -->
+      <header class="bg-white shadow-sm border-b px-6 py-3 flex justify-between items-center z-10">
+        <div class="flex items-center gap-4">
+          <a href="/" target="_blank" class="text-blue-600 hover:text-blue-800 flex items-center gap-2 text-sm font-medium">
+            <Home className="w-4 h-4" /> Xem trang
+          </a>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="text-sm">Xin chào, <strong>Admin</strong></div>
+          <div class="w-8 h-8 rounded-full bg-gray-300"></div>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <main class="flex-1 overflow-auto p-6">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

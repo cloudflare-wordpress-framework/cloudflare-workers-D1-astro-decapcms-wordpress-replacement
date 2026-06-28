@@ -1,0 +1,63 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { FileText, MessageSquare, Image, Eye } from 'lucide-react';
+
+const stats = [
+  { title: "Bài viết", value: 12, icon: FileText },
+  { title: "Bình luận", value: 45, icon: MessageSquare },
+  { title: "Thư viện", value: 120, icon: Image },
+  { title: "Lượt xem", value: "12,345", icon: Eye },
+];
+---
+<AdminLayout>
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold">Bảng tin</h1>
+    <p class="text-gray-500">Tổng quan về tình trạng website của bạn.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    {stats.map(stat => (
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <CardTitle className="text-sm font-medium text-gray-500">{stat.title}</CardTitle>
+          <stat.icon className="w-4 h-4 text-gray-400" />
+        </CardHeader>
+        <CardContent>
+          <div class="text-2xl font-bold">{stat.value}</div>
+        </CardContent>
+      </Card>
+    ))}
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <Card>
+      <CardHeader>
+        <CardTitle>Bản nháp nhanh</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form class="space-y-4">
+          <input type="text" placeholder="Tiêu đề" class="w-full border rounded px-3 py-2 text-sm" />
+          <textarea placeholder="Nội dung" rows="4" class="w-full border rounded px-3 py-2 text-sm"></textarea>
+          <button type="button" class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">Lưu bản nháp</button>
+        </form>
+      </CardContent>
+    </Card>
+
+    <Card>
+      <CardHeader>
+        <CardTitle>Hoạt động gần đây</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ul class="space-y-4 text-sm">
+          <li class="flex items-center gap-2">
+            <span class="text-gray-400">10:45</span> Bạn vừa cập nhật bài viết <strong>"Tối ưu Jamstack"</strong>.
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-gray-400">Hôm qua</span> Admin vừa upload 3 hình ảnh mới.
+          </li>
+        </ul>
+      </CardContent>
+    </Card>
+  </div>
+</AdminLayout>

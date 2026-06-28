@@ -1,0 +1,41 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { Card, CardContent } from '@/components/ui/card';
+---
+<AdminLayout>
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold">Cài đặt tổng quan</h1>
+    <p class="text-gray-500">Cấu hình các thông số cơ bản cho website.</p>
+  </div>
+
+  <Card className="max-w-2xl">
+    <CardContent className="p-6">
+      <form class="space-y-6">
+        <div>
+          <label class="block text-sm font-medium mb-1">Tên website</label>
+          <input type="text" value="Jamstack Admin" class="w-full border rounded px-3 py-2 text-sm" />
+          <p class="text-xs text-gray-500 mt-1">Tên này sẽ hiển thị trên thanh tiêu đề của trình duyệt.</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Khẩu hiệu (Tagline)</label>
+          <input type="text" value="Giải pháp Jamstack thay thế WordPress hoàn hảo" class="w-full border rounded px-3 py-2 text-sm" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Địa chỉ trang web (URL)</label>
+          <input type="url" value="https://my-astro-site.com" class="w-full border rounded px-3 py-2 text-sm text-gray-500 bg-gray-50" readonly />
+        </div>
+
+        <hr />
+
+        <div class="flex items-center gap-2">
+          <input type="checkbox" id="allow_registration" checked />
+          <label for="allow_registration" class="text-sm">Ai cũng có thể đăng ký (qua Firebase Auth)</label>
+        </div>
+
+        <button type="button" class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">Lưu thay đổi</button>
+      </form>
+    </CardContent>
+  </Card>
+</AdminLayout>
