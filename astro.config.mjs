@@ -10,7 +10,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://',
+  site: 'https://my-astro-site.vnvdacloudlear.workers.dev/',
   vite: {
     plugins: [tailwindcss()]
   },
