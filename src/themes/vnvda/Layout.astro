@@ -51,10 +51,10 @@ import '../../styles/global.css';
                             <svg class="w-4 h-4 ml-1 md:inline hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </a>
                         <!-- Submenu -->
-                        <ul class="hidden md:group-hover:block absolute left-0 bg-white text-gray-800 shadow-lg min-w-[200px] border-t-2 border-red-600 mobile-submenu">
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors">Về chúng tôi</a></li>
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Lịch sử hình thành</a></li>
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Ban chấp hành</a></li>
+                        <ul class="hidden md:group-hover:block absolute left-0 bg-white shadow-lg min-w-[200px] border-t-2 border-red-600 mobile-submenu">
+                            <li><a href="#" class="block px-4 py-3 text-gray-800 hover:bg-gray-100 hover:text-red-600 transition-colors">Về chúng tôi</a></li>
+                            <li><a href="#" class="block px-4 py-3 text-gray-800 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Lịch sử hình thành</a></li>
+                            <li><a href="#" class="block px-4 py-3 text-gray-800 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Ban chấp hành</a></li>
                         </ul>
                     </li>
 
@@ -63,10 +63,10 @@ import '../../styles/global.css';
                             Tin tức - Sự kiện
                             <svg class="w-4 h-4 ml-1 md:inline hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </a>
-                        <ul class="hidden md:group-hover:block absolute left-0 bg-white text-gray-800 shadow-lg min-w-[200px] border-t-2 border-red-600 mobile-submenu">
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors">Hoạt động hội</a></li>
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Cập nhật y khoa</a></li>
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Hợp tác quốc tế</a></li>
+                        <ul class="hidden md:group-hover:block absolute left-0 bg-white shadow-lg min-w-[200px] border-t-2 border-red-600 mobile-submenu">
+                            <li><a href="#" class="block px-4 py-3 text-gray-800 hover:bg-gray-100 hover:text-red-600 transition-colors">Hoạt động hội</a></li>
+                            <li><a href="#" class="block px-4 py-3 text-gray-800 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Cập nhật y khoa</a></li>
+                            <li><a href="#" class="block px-4 py-3 text-gray-800 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Hợp tác quốc tế</a></li>
                         </ul>
                     </li>
 
@@ -75,10 +75,10 @@ import '../../styles/global.css';
                             Hội viên
                             <svg class="w-4 h-4 ml-1 md:inline hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </a>
-                        <ul class="hidden md:group-hover:block absolute left-0 bg-white text-gray-800 shadow-lg min-w-[200px] border-t-2 border-red-600 mobile-submenu">
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors">Đăng ký</a></li>
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Hội phí</a></li>
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Danh sách hội viên</a></li>
+                        <ul class="hidden md:group-hover:block absolute left-0 bg-white shadow-lg min-w-[200px] border-t-2 border-red-600 mobile-submenu">
+                            <li><a href="#" class="block px-4 py-3 text-gray-800 hover:bg-gray-100 hover:text-red-600 transition-colors">Đăng ký</a></li>
+                            <li><a href="#" class="block px-4 py-3 text-gray-800 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Hội phí</a></li>
+                            <li><a href="#" class="block px-4 py-3 text-gray-800 hover:bg-gray-100 hover:text-red-600 transition-colors border-t border-gray-100">Danh sách hội viên</a></li>
                         </ul>
                     </li>
 
@@ -154,7 +154,7 @@ import '../../styles/global.css';
                                     // Make submenu links match mobile theme
                                     const links = submenu.querySelectorAll('a');
                                     links.forEach(l => {
-                                        l.classList.remove('hover:bg-gray-100', 'hover:text-red-600', 'border-gray-100');
+                                        l.classList.remove('text-gray-800', 'hover:bg-gray-100', 'hover:text-red-600', 'border-gray-100');
                                         l.classList.add('hover:bg-red-600', 'border-[#2c4e71]');
                                     });
                                 } else {
