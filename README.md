@@ -1,4 +1,4 @@
-# Dự án Jamstack thay thế WordPress (Astro + Decap CMS + Workers + D1)
+# Dự án Jamstack thay thế WordPress (Astro + Keystatic + Workers + D1)
 
 Đây là dự án hoàn chỉnh nhằm chuyển đổi hệ thống website từ WordPress sang kiến trúc Jamstack tĩnh hoàn toàn, giúp tối ưu chi phí (0 đồng hạ tầng), tối đa hóa điểm SEO (Lighthouse 100/100) và gia tăng bảo mật.
 
@@ -6,11 +6,11 @@
 
 Hệ thống được thiết kế theo mô hình **Tách rời hoàn toàn (Decoupled)** nhằm tận dụng tối đa gói miễn phí (Free Tier) của nhiều nền tảng kết hợp lại:
 
-- **Cloudflare Pages (Frontend Hosting):** Chứa file HTML tĩnh (SSG) của Astro. Khách vãng lai đọc bài sẽ tải file trực tiếp từ đây. **Tần suất gọi API Worker là 0** giúp bạn không bao giờ vượt qua giới hạn miễn phí.
-- **Decap CMS + GitHub (Quản lý nội dung):** Decap CMS (giao diện Admin) chạy thẳng trên trình duyệt của bạn. Khi viết bài xong, nó sẽ tự động đẩy (commit) một file Markdown lên GitHub. Cloudflare Pages sẽ nhận tín hiệu này và tự động biên dịch lại website. Ảnh cũng được đẩy trực tiếp lên kho chứa GitHub.
+- **Astro (Frontend & Hybrid SSG):** Chứa file HTML tĩnh (SSG) của Astro. Khách vãng lai đọc bài sẽ tải file trực tiếp từ đây. **Tần suất gọi API Worker là 0** với khách vãng lai giúp tối ưu chi phí. Astro hỗ trợ dynamic hybrid kết hợp giữa các phần tĩnh và các phần component động liên lạc với Cloudflare worker.
+- **Keystatic + GitHub (Quản lý nội dung CMS):** Keystatic (giao diện Admin) chạy thẳng trên trình duyệt của bạn. Khi viết bài xong, nó sẽ tự động đẩy (commit) một file Markdown/Markdoc lên GitHub. Cloudflare Pages sẽ nhận tín hiệu này và tự động biên dịch lại website. Ảnh cũng được đẩy trực tiếp lên kho chứa GitHub.
 - **Cloudflare D1 (Database SQL Miễn phí):** Một hệ quản trị cơ sở dữ liệu siêu nhẹ được dùng để lưu trữ thông tin "Thành viên" (Users) của hệ thống.
-- **Cloudflare Workers (Cầu nối API Gateway):** Đóng vai trò là hệ thống Backend xử lý logic động (Ví dụ: Nhận mã Token từ Firebase, lưu User xuống D1, hoặc nhận file PDF và tải lên GitHub Releases).
-- **GitHub Releases (Storage lớn):** Dùng để chứa các file lớn (như PDF < 10MB) bằng cách tận dụng API tạo Release ẩn để người dùng được phép tải miễn phí băng thông cao.
+- **Cloudflare Workers (Cầu nối API Gateway / Server Module):** Đóng vai trò như một server module nhẹ nhàng chỉ tập trung xử lý quản lý luồng người dùng và xác thực thông qua Firebase tích hợp vào Astro, và lưu User xuống D1.
+- **GitHub Releases (Storage lớn):** Dùng để chứa các file lớn bằng cách tận dụng API tạo Release ẩn để người dùng được phép tải miễn phí băng thông cao.
 - **Firebase Auth (Xác thực đăng nhập):** Xử lý đăng nhập an toàn bằng Email/Mật khẩu hoặc Google. Thay vì tốn phí tự xây dựng luồng bảo mật, Firebase Auth gói Free Tier xử lý hoàn toàn cho chúng ta. Nó sẽ gửi một `idToken` lên Worker để lưu user vào hệ thống.
 
 ---
@@ -53,7 +53,7 @@ Hệ thống của chúng tôi được thiết kế để tự động hóa to�
      - Chạy lệnh sau trong terminal: `npx wrangler d1 create user-db` (Yêu cầu bạn phải đăng nhập vào Cloudflare trước bằng `npx wrangler login`).
      - Terminal sẽ in ra một bảng thông tin, copy chuỗi ký tự ở cột `database_id` và dán vào đây.
 
-   - **`DECAP_GITHUB_REPO`**:
+   - **`DECAP_GITHUB_REPO`**: (Dành cho Keystatic)
      - Đây là đường dẫn kho chứa mã nguồn GitHub của bạn.
      - Ví dụ: Nếu link repo của bạn là `https://github.com/nguyenvana/my-website`, hãy điền `nguyenvana/my-website`.
 
