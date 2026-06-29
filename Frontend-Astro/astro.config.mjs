@@ -25,7 +25,10 @@ export default defineConfig({
   output: 'static',
   adapter: cloudflare(),
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    define: {
+      'process.env.DECAP_GITHUB_REPO': JSON.stringify(env.DECAP_GITHUB_REPO || 'owner/repo')
+    }
   },
 
   integrations: [
