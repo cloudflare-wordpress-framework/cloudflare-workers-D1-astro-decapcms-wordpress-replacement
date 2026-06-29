@@ -5,13 +5,13 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 const getNews = async () => {
   try {
     // @ts-ignore: Astro.glob is available in Astro components but types might not be perfectly inferred here
-    const allPosts = await Astro.glob('../../pages/posts/*.md');
+    const allPosts = await Astro.glob('../../content/posts/*.md');
     return allPosts.map((post: any) => ({
       title: post.frontmatter.title,
       desc: post.frontmatter.desc,
       date: post.frontmatter.date,
       image: post.frontmatter.image,
-      url: post.url
+      url: `/posts/${post.file.split('/').pop().replace('.md', '')}`
     }));
   } catch (e) {
     // Fallback if no posts

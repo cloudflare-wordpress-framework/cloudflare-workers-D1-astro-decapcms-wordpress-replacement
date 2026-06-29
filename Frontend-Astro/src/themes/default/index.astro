@@ -8,13 +8,13 @@ import config from '../../plugins/plugins.config.json';
 const getPosts = async () => {
   try {
     // @ts-ignore: Astro.glob is available in Astro components but types might not be perfectly inferred here
-    const allPosts = await Astro.glob('../../pages/posts/*.md');
+    const allPosts = await Astro.glob('../../content/posts/*.md');
     return allPosts.map((post: any) => ({
       title: post.frontmatter.title,
       desc: post.frontmatter.desc,
       date: post.frontmatter.date,
       image: post.frontmatter.image,
-      url: post.url
+      url: `/posts/${post.file.split('/').pop().replace('.md', '')}`
     }));
   } catch (e) {
     // Fallback if no posts
@@ -40,7 +40,7 @@ const isCommentActive = config.active_plugins.includes('plugin-comment-system');
       Blog chuyên chia sẻ các bài viết kỹ thuật, hướng dẫn cấu hình và trải nghiệm chuyển đổi hệ thống website hiện đại, tối ưu chi phí.
     </p>
     <div class="flex justify-center gap-4">
-      <a href="/admin/cms.html">
+      <a href="/keystatic">
         <Button size="lg" className="font-semibold">Tạo Bài Mới</Button>
       </a>
       <a href="/admin/settings">
