@@ -78,6 +78,45 @@ Hệ thống của chúng tôi được thiết kế để tự động hóa to�
      - Ở mục *Select scopes*, **đánh dấu tích vào ô `repo`** (Full control of private repositories).
      - Bấm **Generate token**, copy dãy ký tự bắt đầu bằng `ghp_` và dán vào `GITHUB_PAT`.
 
+   - **`KEYSTATIC_GITHUB_CLIENT_ID` và `KEYSTATIC_GITHUB_CLIENT_SECRET`**:
+     - Đây là thông tin của GitHub App/OAuth App mà Keystatic dùng để đăng nhập và ghi nội dung vào repo.
+     - Nếu Keystatic hiện màn hình setup GitHub App, bạn có thể làm theo luồng đó để tạo app, sau đó copy `Client ID` và `Client Secret` vào `.env`.
+     - **`KEYSTATIC_GITHUB_CALLBACK_URL`** phải luôn có `/api/keystatic/github/oauth/callback`. Không dùng `/keystatic/github/oauth/callback`.
+     - Callback URL cho local phải có:
+       ```txt
+       http://127.0.0.1:4321/api/keystatic/github/oauth/callback
+       ```
+     - Khi deploy lên Cloudflare Pages, thêm callback URL production, ví dụ:
+       ```txt
+       https://your-site.pages.dev/api/keystatic/github/oauth/callback
+       ```
+     - Nếu frontend được deploy bằng `wrangler deploy` lên Workers, dùng đúng domain `workers.dev` của site:
+       ```txt
+       https://my-astro-site.vnvdacloudlear.workers.dev/api/keystatic/github/oauth/callback
+       ```
+     - Khi chạy `npm run setup:env` hoặc `npm run deploy`, hệ thống sẽ in ra callback URL chuẩn từ `.env`. Hãy copy đúng URL đó vào GitHub OAuth App trong ô **Authorization callback URL**.
+
+   - **`KEYSTATIC_SECRET`**:
+     - Đây không phải GitHub token và không lấy từ GitHub. Đây là chuỗi bí mật ngẫu nhiên do bạn tự tạo, được Keystatic dùng để ký/mã hóa session OAuth.
+     - Giá trị này phải dài ít nhất 32 ký tự và phải được giữ bí mật như password.
+     - Tạo bằng OpenSSL:
+       ```bash
+       openssl rand -base64 32
+       ```
+     - Hoặc tạo bằng Node.js:
+       ```bash
+       node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+       ```
+     - Copy kết quả vào `.env`, ví dụ:
+       ```env
+       KEYSTATIC_SECRET=chuoi_ngau_nhien_ban_vua_tao
+       ```
+     - Trên Cloudflare, cũng thêm biến này vào Worker frontend `my-astro-site` trong **Settings > Variables and Secrets**. Nếu đổi `KEYSTATIC_SECRET`, các phiên đăng nhập Keystatic cũ sẽ mất hiệu lực và cần đăng nhập lại.
+     - Nếu deploy bằng CLI, chạy lệnh sau để đồng bộ các secret `KEYSTATIC_*` từ `.env` lên Worker frontend:
+       ```bash
+       npm run deploy:pages:secrets
+       ```
+
    - **`PUBLIC_FIREBASE_*` (Tùy chọn)**:
      - Truy cập [Firebase Console](https://console.firebase.google.com/), tạo một dự án mới.
      - Trong dự án, chọn biểu tượng Web (</>) để thêm ứng dụng web mới.

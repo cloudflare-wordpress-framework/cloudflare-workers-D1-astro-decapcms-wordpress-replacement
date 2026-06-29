@@ -1,4 +1,4 @@
-name = "my-astro-site"
+name = "my-astro-site-api"
 compatibility_date = "2024-11-20"
 main = "src/workers/index.js"
 
