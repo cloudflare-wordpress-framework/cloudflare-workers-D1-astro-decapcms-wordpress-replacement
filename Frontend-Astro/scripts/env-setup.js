@@ -5,7 +5,8 @@ import dotenv from 'dotenv';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const rootDir = path.resolve(__dirname, '..');
+const rootDir = path.resolve(__dirname, '..', '..');
+const backendDir = path.resolve(rootDir, 'Backend-worker');
 
 // Load environment variables from .env
 dotenv.config({ path: path.join(rootDir, '.env') });
@@ -35,22 +36,16 @@ function replaceEnvVariables(templatePath, outputPath) {
 
 // 1. Generate wrangler.toml
 replaceEnvVariables(
-  path.join(rootDir, 'wrangler.template.toml'),
-  path.join(rootDir, 'wrangler.toml')
+  path.join(backendDir, 'wrangler.template.toml'),
+  path.join(backendDir, 'wrangler.toml')
 );
 
-// 2. Generate Decap CMS config.yml
-replaceEnvVariables(
-  path.join(rootDir, 'public', 'admin', 'config.template.yml'),
-  path.join(rootDir, 'public', 'admin', 'config.yml')
-);
-
-// 3. Generate .dev.vars for local Worker execution
+// 2. Generate .dev.vars for local Worker execution
 const devVarsContent = `
 GITHUB_CLIENT_ID="${process.env.GITHUB_CLIENT_ID || ''}"
 GITHUB_CLIENT_SECRET="${process.env.GITHUB_CLIENT_SECRET || ''}"
 GITHUB_PAT="${process.env.GITHUB_PAT || ''}"
 `.trim();
 
-fs.writeFileSync(path.join(rootDir, '.dev.vars'), devVarsContent, 'utf8');
+fs.writeFileSync(path.join(backendDir, '.dev.vars'), devVarsContent, 'utf8');
 console.log(`[SUCCESS] Generated .dev.vars for Wrangler local development.`);
